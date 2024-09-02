@@ -1,2 +1,2 @@
-![example workflow](https://github.com/github/docs/actions/workflows/cmake-single-platform.yml/badge.svg)
+![example workflow](https://github.com/mofrisch/compiler.git/.github/workflows/cmake-single-platform.yml/badge.svg)
 Building a Compiler...
