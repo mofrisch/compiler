@@ -5,8 +5,7 @@ static void ADD(benchmark::State& state) {
 
     for (auto _ : state) {
         // This code gets timed
-        1 + 2;
-    }
+        }
 }
 // Register the function as a benchmark
 BENCHMARK(ADD);
