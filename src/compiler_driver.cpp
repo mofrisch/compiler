@@ -29,7 +29,7 @@ int run_command(const char* command, const char* const argv[]) {
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::cerr << "Usage: ./driver <source_file.c>" << std::endl;
+        std::cerr << "Usage: ${argv} <source_file.c>" << std::endl;
         return 1;
     }
 
