@@ -7,9 +7,23 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Detect compiler and apply specific flags based on the compiler
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    message(STATUS "Using Clang compiler")
+    add_compile_options(
+        -fmodules-ts
+        -fdeps-format=p1689r5
+        -fmodule-mapper=${CMAKE_CURRENT_BINARY_DIR}/module-mapper.modmap
+    )
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    message(STATUS "Using GCC compiler")
+    # No module flags for GCC, as it does not support them fully yet
+    add_compile_options(-Wall)  # Add any specific GCC options here
+endif()
+
 # Set build types (Debug, Release, etc.)
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall")
+#set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall")
+#set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall")
 
 # Option to set the build type if not specified
 if(NOT CMAKE_BUILD_TYPE)
@@ -31,9 +45,6 @@ add_custom_target(
     COMMAND clang-format -i ${ALL_SOURCE_FILES}
     COMMENT "Running clang-format"
 )
-
-# Enable testing
-enable_testing()
 
 # Google Test and Google Benchmark
 find_package(GTest REQUIRED)
@@ -85,3 +96,15 @@ target_link_libraries(my_compiler PRIVATE ${REFLEX_LIB})
 # The lexer
 add_executable(Lexer ${LEXER_OUTPUT})
 target_link_libraries(Lexer PRIVATE ${REFLEX_LIB})
+
+# Logginng library
+add_library(logging src/log.cpp)
+
+
+# Test executable that uses GoogleTest
+add_executable(log_test test/log_test.cpp)
+target_link_libraries(log_test logging GTest::GTest GTest::Main)
+
+# Enable testing
+enable_testing()
+add_test(NAME LogTest COMMAND log_test)
