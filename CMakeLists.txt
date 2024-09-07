@@ -17,6 +17,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Enable specific sanitizers for different testing cases
+set(SANITIZER_FLAGS "")
 if(SANITIZER_MODE STREQUAL "thread")
     set(SANITIZER_FLAGS "-fsanitize=thread")
 elseif(SANITIZER_MODE STREQUAL "memory")
@@ -24,10 +25,9 @@ elseif(SANITIZER_MODE STREQUAL "memory")
 else()
     set(SANITIZER_FLAGS "-fsanitize=address,undefined")
 endif()
-
 # Apply the sanitizer flags
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${SANITIZER_FLAGS}")
-set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} ${SANITIZER_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
+set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${SANITIZER_FLAGS}")
 
 
 # Collect source files
@@ -46,6 +46,9 @@ find_package(Threads REQUIRED)  # For pthread linking
 find_package(benchmark REQUIRED)
 
 # RE/flex Lexer integration
+option(ENABLE_LEXER "Enable RE/flex-based lexer" ON)
+
+if(ENABLE_LEXER)
 find_program(REFLEX_EXECUTABLE reflex)
 if(NOT REFLEX_EXECUTABLE)
     message(FATAL_ERROR "RE/flex not found. Please install RE/flex.")
@@ -66,19 +69,16 @@ find_library(REFLEX_LIB reflex_shared_lib HINTS /usr/local/lib64)
 if(NOT REFLEX_LIB)
     message(FATAL_ERROR "RE/flex library not found.")
 endif()
+endif()
 
 # Include directories for header files
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-# Compiler driver
-add_executable(Driver driver/compiler_driver.cpp driver/utilities.cpp)
+# Include subdirectory for driver
+add_subdirectory(driver)
 
-# Copy the result file (Driver) to another directory after building
-add_custom_command(TARGET Driver POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy
-            $<TARGET_FILE:Driver>  # Source file (the result)
-            ${CMAKE_SOURCE_DIR}/input/  # Destination directory
-)
+# Include subdirectory for logging
+add_subdirectory(log)
 
 # Compiler
 add_executable(my_compiler src/compiler.cpp)
@@ -87,9 +87,6 @@ target_link_libraries(my_compiler PRIVATE ${REFLEX_LIB})
 # Lexer
 add_executable(Lexer ${LEXER_OUTPUT})
 target_link_libraries(Lexer PRIVATE ${REFLEX_LIB})
-
-# Logging library
-add_library(logging src/log.cpp)
 
 # Test executable that uses GoogleTest
 add_executable(log_test test/log_test.cpp)

@@ -1,37 +1,37 @@
 [
 {
   "directory": "/home/mo/Development/norasandler/compiler/build",
-  "command": "/usr/bin/g++ -I/home/mo/Development/norasandler/compiler/include -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic -fmodules-ts -fmodule-mapper=CMakeFiles/Driver.dir/driver/compiler_driver.cpp.o.modmap -MD -fdeps-format=p1689r5 -x c++ -o CMakeFiles/Driver.dir/driver/compiler_driver.cpp.o -c /home/mo/Development/norasandler/compiler/driver/compiler_driver.cpp",
+  "command": "/usr/bin/clang++ -I/home/mo/Development/norasandler/compiler/include  -fsanitize=address,undefined -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic @CMakeFiles/Driver.dir/driver/compiler_driver.cpp.o.modmap -o CMakeFiles/Driver.dir/driver/compiler_driver.cpp.o -c /home/mo/Development/norasandler/compiler/driver/compiler_driver.cpp",
   "file": "/home/mo/Development/norasandler/compiler/driver/compiler_driver.cpp",
   "output": "CMakeFiles/Driver.dir/driver/compiler_driver.cpp.o"
 },
 {
   "directory": "/home/mo/Development/norasandler/compiler/build",
-  "command": "/usr/bin/g++ -I/home/mo/Development/norasandler/compiler/include -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic -fmodules-ts -fmodule-mapper=CMakeFiles/Driver.dir/driver/utilities.cpp.o.modmap -MD -fdeps-format=p1689r5 -x c++ -o CMakeFiles/Driver.dir/driver/utilities.cpp.o -c /home/mo/Development/norasandler/compiler/driver/utilities.cpp",
+  "command": "/usr/bin/clang++ -I/home/mo/Development/norasandler/compiler/include  -fsanitize=address,undefined -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic @CMakeFiles/Driver.dir/driver/utilities.cpp.o.modmap -o CMakeFiles/Driver.dir/driver/utilities.cpp.o -c /home/mo/Development/norasandler/compiler/driver/utilities.cpp",
   "file": "/home/mo/Development/norasandler/compiler/driver/utilities.cpp",
   "output": "CMakeFiles/Driver.dir/driver/utilities.cpp.o"
 },
 {
   "directory": "/home/mo/Development/norasandler/compiler/build",
-  "command": "/usr/bin/g++ -I/home/mo/Development/norasandler/compiler/include -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic -fmodules-ts -fmodule-mapper=CMakeFiles/my_compiler.dir/src/compiler.cpp.o.modmap -MD -fdeps-format=p1689r5 -x c++ -o CMakeFiles/my_compiler.dir/src/compiler.cpp.o -c /home/mo/Development/norasandler/compiler/src/compiler.cpp",
+  "command": "/usr/bin/clang++ -I/home/mo/Development/norasandler/compiler/include  -fsanitize=address,undefined -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic @CMakeFiles/my_compiler.dir/src/compiler.cpp.o.modmap -o CMakeFiles/my_compiler.dir/src/compiler.cpp.o -c /home/mo/Development/norasandler/compiler/src/compiler.cpp",
   "file": "/home/mo/Development/norasandler/compiler/src/compiler.cpp",
   "output": "CMakeFiles/my_compiler.dir/src/compiler.cpp.o"
 },
 {
   "directory": "/home/mo/Development/norasandler/compiler/build",
-  "command": "/usr/bin/g++ -I/home/mo/Development/norasandler/compiler/include -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic -fmodules-ts -fmodule-mapper=CMakeFiles/Lexer.dir/lexer.cpp.o.modmap -MD -fdeps-format=p1689r5 -x c++ -o CMakeFiles/Lexer.dir/lexer.cpp.o -c /home/mo/Development/norasandler/compiler/build/lexer.cpp",
+  "command": "/usr/bin/clang++ -I/home/mo/Development/norasandler/compiler/include  -fsanitize=address,undefined -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic @CMakeFiles/Lexer.dir/lexer.cpp.o.modmap -o CMakeFiles/Lexer.dir/lexer.cpp.o -c /home/mo/Development/norasandler/compiler/build/lexer.cpp",
   "file": "/home/mo/Development/norasandler/compiler/build/lexer.cpp",
   "output": "CMakeFiles/Lexer.dir/lexer.cpp.o"
 },
 {
   "directory": "/home/mo/Development/norasandler/compiler/build",
-  "command": "/usr/bin/g++ -I/home/mo/Development/norasandler/compiler/include -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic -fmodules-ts -fmodule-mapper=CMakeFiles/logging.dir/src/log.cpp.o.modmap -MD -fdeps-format=p1689r5 -x c++ -o CMakeFiles/logging.dir/src/log.cpp.o -c /home/mo/Development/norasandler/compiler/src/log.cpp",
+  "command": "/usr/bin/clang++ -I/home/mo/Development/norasandler/compiler/include  -fsanitize=address,undefined -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic @CMakeFiles/logging.dir/src/log.cpp.o.modmap -o CMakeFiles/logging.dir/src/log.cpp.o -c /home/mo/Development/norasandler/compiler/src/log.cpp",
   "file": "/home/mo/Development/norasandler/compiler/src/log.cpp",
   "output": "CMakeFiles/logging.dir/src/log.cpp.o"
 },
 {
   "directory": "/home/mo/Development/norasandler/compiler/build",
-  "command": "/usr/bin/g++ -DGTEST_LINKED_AS_SHARED_LIBRARY=1 -I/home/mo/Development/norasandler/compiler/include -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic -fmodules-ts -fmodule-mapper=CMakeFiles/log_test.dir/test/log_test.cpp.o.modmap -MD -fdeps-format=p1689r5 -x c++ -o CMakeFiles/log_test.dir/test/log_test.cpp.o -c /home/mo/Development/norasandler/compiler/test/log_test.cpp",
+  "command": "/usr/bin/clang++ -DGTEST_LINKED_AS_SHARED_LIBRARY=1 -I/home/mo/Development/norasandler/compiler/include  -fsanitize=address,undefined -O3 -DNDEBUG -std=gnu++23 -Wall -Wextra -Wpedantic @CMakeFiles/log_test.dir/test/log_test.cpp.o.modmap -o CMakeFiles/log_test.dir/test/log_test.cpp.o -c /home/mo/Development/norasandler/compiler/test/log_test.cpp",
   "file": "/home/mo/Development/norasandler/compiler/test/log_test.cpp",
   "output": "CMakeFiles/log_test.dir/test/log_test.cpp.o"
 }
