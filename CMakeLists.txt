@@ -7,7 +7,15 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_BUILD_TYPE Debug)
+# Set build types (Debug, Release, etc.)
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall")
+
+# Option to set the build type if not specified
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
+
 
 set(SOURCES src/compiler.cpp src/compiler_driver.cpp)
 
@@ -17,11 +25,11 @@ file(GLOB_RECURSE ALL_SOURCE_FILES *.cpp *.h)
 # Enable clang-tidy
 set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=-llvmlibc-*,-modernize-use-trailing-return-type,-hicpp-named-parameter")
 
-# Clang-Format Target (Optional: Use for formatting code)
+# Clang-Format Target
 add_custom_target(
-     clang-format
-     COMMAND clang-format -i ${ALL_SOURCE_FILES}
-     COMMENT "Running clang-format"
+    clang-format
+    COMMAND clang-format -i ${ALL_SOURCE_FILES}
+    COMMENT "Running clang-format"
 )
 
 # Enable testing
@@ -49,17 +57,31 @@ add_custom_command(
     COMMENT "Generating lexer.cpp with RE/flex"
 )
 
+# Use find_library to locate RE/flex shared library
+find_library(REFLEX_LIB reflex_shared_lib HINTS /usr/local/lib64)
+
+if(NOT REFLEX_LIB)
+    message(FATAL_ERROR "RE/flex library not found.")
+endif()
+
+# Add the include directory for header files
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
 # The compiler driver
-add_executable(Driver src/compiler_driver.cpp )
+add_executable(Driver driver/compiler_driver.cpp driver/utilities.cpp)
+
+# After building, copy the result file (Driver) to another directory
+add_custom_command(TARGET Driver POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+            $<TARGET_FILE:Driver>  # Source file (the result)
+            ${CMAKE_SOURCE_DIR}/input/  # Destination directory
+)
+
 
 # The compiler
 add_executable(my_compiler src/compiler.cpp)
-target_link_libraries(my_compiler PRIVATE /usr/local/lib64/libreflex_shared_lib.so)
+target_link_libraries(my_compiler PRIVATE ${REFLEX_LIB})
 
 # The lexer
 add_executable(Lexer ${LEXER_OUTPUT})
-target_link_libraries(Lexer PRIVATE reflex_shared_lib)
-
-
-
-
+target_link_libraries(Lexer PRIVATE ${REFLEX_LIB})

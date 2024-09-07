@@ -56,12 +56,11 @@ CMakeLists.txt.user
 *.qmake.stash
 *.qmake.cache
 
-# Output directories
+# More directories
 out/
 build/
-
-# Scratch Directory
 scratch/
+.cache/
 
-# Other
+# MacOS
 *.DS_Store
