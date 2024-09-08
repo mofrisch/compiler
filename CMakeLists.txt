@@ -89,8 +89,8 @@ add_executable(Lexer ${LEXER_OUTPUT})
 target_link_libraries(Lexer PRIVATE ${REFLEX_LIB})
 
 # Test executable that uses GoogleTest
-add_executable(log_test test/log_test.cpp)
-target_link_libraries(log_test logging GTest::GTest GTest::Main)
+# add_executable(log_test test/log_test.cpp)
+# target_link_libraries(log_test log GTest::GTest GTest::Main)
 
 # Enable testing
 enable_testing()

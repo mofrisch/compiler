@@ -3,7 +3,7 @@
 add_executable(Driver main.cpp Checks.cpp Stages.cpp)
 
 # Link any necessary libraries (if needed, e.g., logging or other libraries)
-target_link_libraries(Driver PRIVATE logging)
+target_link_libraries(Driver PRIVATE log)
 
 # Post-build: Copy the result file (Driver) to another directory after building
 add_custom_command(TARGET Driver POST_BUILD

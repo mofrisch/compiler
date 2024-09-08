@@ -1,8 +1,10 @@
 #include <string>
+#include <vector>
+
 
 class Checks {
     public:
     void privileges();
     std::string filename(const std::string &filename);
-    void arguments(int argc, char *argv[]);
+    auto arguments(int argc, char *argv[]) -> std::vector<std::string>;
     };
