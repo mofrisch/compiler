@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: Bacondish2023/setup-google-test@v1
+      - uses: Bacondish2023/setup-googletest@v1
 
       - name: Install dependencies
         run: |
