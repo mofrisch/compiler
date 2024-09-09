@@ -7,10 +7,17 @@
 
 #include "Checks.h"
 
+void test(int a) {
+  if (a == 0) {
+    throw std::runtime_error("Error: The file does not exist.");
+  }
+}
+
+
 void Checks::privileges() {
   if (geteuid() == 0) {
     throw std::runtime_error(
-        "Do not run this program with elevated privileges (root).");
+      "Do not run this program with elevated privileges (root).");
   }
 }
 
@@ -19,13 +26,13 @@ std::string Checks::filename(const std::string &filename) {
 
   if (!file_path.has_extension() || file_path.extension() != ".c") {
     throw std::invalid_argument(
-        "Error: The source file must have a .c extension.");
+      "Error: The source file must have a .c extension.");
   }
 
   if (!std::filesystem::exists(file_path) ||
       !std::filesystem::is_regular_file(file_path)) {
     throw std::invalid_argument(
-        "Error: The file does not exist or is not a regular file.");
+      "Error: The file does not exist or is not a regular file.");
   }
 
   return file_path.stem().string();
