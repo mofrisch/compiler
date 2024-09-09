@@ -29,7 +29,7 @@ jobs:
 
       - name: Build RE/flex
         run: |
-          git clone https://github.com/Genevia/RE-flex.git
+          git clone git@github.com:Genivia/RE-flex.git
           cd RE-flex
           mkdir -p build
           cd build
