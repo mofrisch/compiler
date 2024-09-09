@@ -27,11 +27,21 @@ jobs:
           libboost-all-dev \
           libbenchmark-dev
 
+      - name: Build RE/flex
+        run: |
+          git clone https://github.com/Genevia/RE-flex.git
+          cd RE-flex
+          mkdir -p build
+          cd build
+          cmake -Wno-dev ..
+          make
+          sudo make install
+
       - name: Build project
         run: |
           mkdir -p build
           cd build
-          cmake ..
+          cmake -Wno-dev ..
           make
 
       - name: Run tests
