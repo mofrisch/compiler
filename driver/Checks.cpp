@@ -7,13 +7,6 @@
 
 #include "Checks.h"
 
-void test(int a) {
-  if (a == 0) {
-    throw std::runtime_error("Error: The file does not exist.");
-  }
-}
-
-
 void Checks::privileges() {
   if (geteuid() == 0) {
     throw std::runtime_error(
@@ -22,15 +15,15 @@ void Checks::privileges() {
 }
 
 std::string Checks::filename(const std::string &filename) {
-  std::filesystem::path file_path(filename);
+  const std::filesystem::path file_path(filename);
 
   if (!file_path.has_extension() || file_path.extension() != ".c") {
     throw std::invalid_argument(
       "Error: The source file must have a .c extension.");
   }
 
-  if (!std::filesystem::exists(file_path) ||
-      !std::filesystem::is_regular_file(file_path)) {
+  if (!exists(file_path) ||
+      !is_regular_file(file_path)) {
     throw std::invalid_argument(
       "Error: The file does not exist or is not a regular file.");
   }
@@ -38,7 +31,7 @@ std::string Checks::filename(const std::string &filename) {
   return file_path.stem().string();
 }
 
-auto Checks::arguments(int argc, char *argv[]) -> std::vector<std::string> {
+auto Checks::arguments(const int argc, char *argv[]) -> std::vector<std::string> {
   std::string compiler_name;
   std::string file_name;
   if (argc == 3) {
@@ -50,8 +43,8 @@ auto Checks::arguments(int argc, char *argv[]) -> std::vector<std::string> {
     std::cout << "file name: ";
     std::cin >> file_name;
   }
-  auto base_name = filename(file_name);
-  std::vector<std::string> arguments = {compiler_name, base_name};
+  const auto base_name = filename(file_name);
+  std::vector arguments = {compiler_name, base_name};
 
   return arguments;
 }

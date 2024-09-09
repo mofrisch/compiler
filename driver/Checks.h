@@ -3,8 +3,10 @@
 
 
 class Checks {
-    public:
-    void privileges();
-    std::string filename(const std::string &filename);
-    auto arguments(int argc, char *argv[]) -> std::vector<std::string>;
-    };
+public:
+    static void privileges();
+
+    static std::string filename(const std::string &filename);
+
+    static auto arguments(int argc, char *argv[]) -> std::vector<std::string>;
+};

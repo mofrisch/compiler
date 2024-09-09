@@ -61,6 +61,7 @@ out/
 build/
 scratch/
 .cache/
+cmake-build-debug/
 
 # MacOS
 *.DS_Store

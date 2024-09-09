@@ -2,14 +2,14 @@
 #include <iostream>
 #include <string>
 
-int main(int argc, char* argv[]) {
+int main(const int argc, char* argv[]) {
     if (argc < 3) {
         std::cerr << "Usage: ./my_compiler <input_file> -o <output_file>"
                   << std::endl;
         return 1;
     }
 
-    std::string output_file =
+    const std::string output_file =
         argv[3];  // Get the output file from the command line argument
 
     // Open the output file for writing

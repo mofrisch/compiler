@@ -16,24 +16,22 @@ Logger &logger = Logger::instance();
 
 int Stages::run_command(const std::string &command,
                         const std::vector<std::string> &args) {
-
   // Log the command and arguments at DEBUG level
   std::string full_command = command;
-  for (const auto &arg : args) {
+  for (const auto &arg: args) {
     full_command += " " + arg;
   }
   logger.log(LogLevel::Debug, "Running command: " + full_command);
 
   // Fork the current process
-  pid_t pid = fork();
 
-  if (pid == 0) {
+  if (const pid_t pid = fork(); pid == 0) {
     // Child process: run the command
     std::vector<const char *> exec_args;
     exec_args.push_back(
-        command.c_str()); // First argument is the command itself
+      command.c_str()); // First argument is the command itself
 
-    for (const auto &arg : args) {
+    for (const auto &arg: args) {
       exec_args.push_back(arg.c_str()); // Add each argument to the vector
     }
     exec_args.push_back(nullptr); // Null-terminate the argument list
@@ -54,36 +52,35 @@ int Stages::run_command(const std::string &command,
     waitpid(pid, &status, 0);
 
     if (WIFEXITED(status)) {
-      int exit_code = WEXITSTATUS(status);
+      const int exit_code = WEXITSTATUS(status);
       logger.log(LogLevel::Debug,
                  "Command exited with code: " + std::to_string(exit_code));
       return exit_code; // Return the exit code of the child process
-    } else {
-      logger.log(LogLevel::Error, "Command did not exit normally.");
-      throw std::runtime_error("Command did not exit normally.");
     }
+    logger.log(LogLevel::Error, "Command did not exit normally.");
+    throw std::runtime_error("Command did not exit normally.");
   } else {
     // Fork failed
-    logger.log(LogLevel::Error, "Fork failed: " + std::string(strerror(errno)));
-    throw std::runtime_error("Fork failed: " + std::string(strerror(errno)));
+    logger.log(LogLevel::Error, "Fork failed.");
+    return -1;
   }
   return 0;
 }
 
-void Stages::execute_stage(const std::string &stage_name, const std::string &command, const std::vector<std::string> &args) {
+void Stages::execute_stage(const std::string &stage_name, const std::string &command,
+                           const std::vector<std::string> &args) {
   logger.log(LogLevel::Info, "Running " + stage_name + " stage...");
 
   // Log the command that is about to run
   std::string full_command = command;
-  for (const auto &arg : args) {
+  for (const auto &arg: args) {
     full_command += " " + arg;
   }
   logger.log(LogLevel::Debug, "Executing: " + full_command);
 
   // Execute the command with args
-  int result = run_command(command, args);
 
-  if (result != 0) {
+  if (const int result = run_command(command, args); result != 0) {
     throw std::runtime_error("Error during " + stage_name + " stage.");
   }
 }
@@ -92,7 +89,7 @@ void Stages::preprocess(const std::string &basename) {
   execute_stage("Preprocessing", "gcc", {"-E", "-P", basename + ".c", "-o", basename + ".i"});
 }
 
-void Stages::compile(const std::string &compiler,const std::string &basename) {
+void Stages::compile(const std::string &compiler, const std::string &basename) {
   execute_stage("Compiling", compiler, {"-S", basename + ".i", "-o", basename + ".s"});
 }
 
