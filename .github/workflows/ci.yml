@@ -18,19 +18,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: Bacondish2023/setup-google-test@v1
 
       - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y \
           libboost-all-dev
-
-      - name: Setup Google Test
-        run: |
-          cd /usr/src/gtest
-          sudo cmake .
-          sudo make
-          sudo cp *.a /usr/lib       # This sets up the Google Test libraries
 
       - name: Build project
         run: |
