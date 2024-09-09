@@ -5,6 +5,8 @@
 
 enum class CommandStatus { SUCCESS, FORK_FAILED, EXEC_FAILED };
 
+class StagesTest;
+
 class Stages {
 public:
     static void preprocess(const std::string &basename);
@@ -17,7 +19,9 @@ public:
 
     static void simple_test();
 
-private:
+    friend StagesTest;
+
+protected:
     // TODO CommandStatus
     static auto run_command(const std::string &command,
                             const std::vector<std::string> &args) -> int;

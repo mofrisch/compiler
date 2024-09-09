@@ -12,19 +12,19 @@ add_compile_options(-Wall -Wextra -Wpedantic)
 
 
 # Set default build type if not provided
-if(NOT CMAKE_BUILD_TYPE)
+if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
-endif()
+endif ()
 
 # Enable specific sanitizers for different testing cases
 set(SANITIZER_FLAGS "")
-if(SANITIZER_MODE STREQUAL "thread")
+if (SANITIZER_MODE STREQUAL "thread")
     set(SANITIZER_FLAGS "-fsanitize=thread")
-elseif(SANITIZER_MODE STREQUAL "memory")
+elseif (SANITIZER_MODE STREQUAL "memory")
     set(SANITIZER_FLAGS "-fsanitize=memory")
-else()
+else ()
     set(SANITIZER_FLAGS "-fsanitize=address,undefined")
-endif()
+endif ()
 # Apply the sanitizer flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
 set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${SANITIZER_FLAGS}")
@@ -35,50 +35,62 @@ file(GLOB_RECURSE ALL_SOURCE_FILES *.cpp *.h)
 
 # Clang-Format Target
 add_custom_target(
-    clang-format
-    COMMAND clang-format -i ${ALL_SOURCE_FILES}
-    COMMENT "Running clang-format"
+        clang-format
+        COMMAND clang-format -i ${ALL_SOURCE_FILES}
+        COMMENT "Running clang-format"
 )
 
-# Google Test and Google Benchmark
+# Google Test integration
 find_package(GTest REQUIRED)
-find_package(Threads REQUIRED)  # For pthread linking
+# Needed for pthread linking
+find_package(Threads REQUIRED)
+# google benchmark integration
 find_package(benchmark REQUIRED)
+# Boost integration
+find_package(Boost REQUIRED COMPONENTS system filesystem)
+# If Boost is found, include directories and link the libraries
+if (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+    # TODO: Add the libraries to the target
+else ()
+    message(FATAL_ERROR "Boost not found")
+endif ()
+
 
 # RE/flex Lexer integration
 option(ENABLE_LEXER "Enable RE/flex-based lexer" ON)
 
-if(ENABLE_LEXER)
-find_program(REFLEX_EXECUTABLE reflex)
-if(NOT REFLEX_EXECUTABLE)
-    message(FATAL_ERROR "RE/flex not found. Please install RE/flex.")
-endif()
+if (ENABLE_LEXER)
+    find_program(REFLEX_EXECUTABLE reflex)
+    if (NOT REFLEX_EXECUTABLE)
+        message(FATAL_ERROR "RE/flex not found. Please install RE/flex.")
+    endif ()
 
-set(LEXER_SOURCE "${CMAKE_SOURCE_DIR}/src/lexer.l")
-set(LEXER_OUTPUT "${CMAKE_BINARY_DIR}/lexer.cpp")
+    set(LEXER_SOURCE "${CMAKE_SOURCE_DIR}/src/lexer.l")
+    set(LEXER_OUTPUT "${CMAKE_BINARY_DIR}/lexer.cpp")
 
-add_custom_command(
-    OUTPUT ${LEXER_OUTPUT}
-    COMMAND ${REFLEX_EXECUTABLE} --flex ${LEXER_SOURCE} -o ${LEXER_OUTPUT}
-    DEPENDS ${LEXER_SOURCE}
-    COMMENT "Generating lexer.cpp with RE/flex"
-)
+    add_custom_command(
+            OUTPUT ${LEXER_OUTPUT}
+            COMMAND ${REFLEX_EXECUTABLE} --flex ${LEXER_SOURCE} -o ${LEXER_OUTPUT}
+            DEPENDS ${LEXER_SOURCE}
+            COMMENT "Generating lexer.cpp with RE/flex"
+    )
 
-# Find RE/flex shared library
-find_library(REFLEX_LIB reflex_shared_lib HINTS /usr/local/lib64)
-if(NOT REFLEX_LIB)
-    message(FATAL_ERROR "RE/flex library not found.")
-endif()
-endif()
+    # Find RE/flex shared library
+    find_library(REFLEX_LIB reflex_shared_lib HINTS /usr/local/lib64)
+    if (NOT REFLEX_LIB)
+        message(FATAL_ERROR "RE/flex library not found.")
+    endif ()
+endif ()
 
 # Include directories for header files
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # Include subdirectory for driver
-add_subdirectory(driver)
+add_subdirectory(src/driver)
 
 # Include subdirectory for logging
-add_subdirectory(log)
+add_subdirectory(src/log)
 
 # Compiler
 add_executable(my_compiler src/compiler.cpp)
@@ -88,10 +100,5 @@ target_link_libraries(my_compiler PRIVATE ${REFLEX_LIB})
 add_executable(Lexer ${LEXER_OUTPUT})
 target_link_libraries(Lexer PRIVATE ${REFLEX_LIB})
 
-# Test executable that uses GoogleTest
-# add_executable(log_test test/log_test.cpp)
-# target_link_libraries(log_test log GTest::GTest GTest::Main)
+add_subdirectory(test)
 
-# Enable testing
-enable_testing()
-add_test(NAME LogTest COMMAND log_test)
