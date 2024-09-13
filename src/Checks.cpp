@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <vector>
 
-#include "Checks.h"
+#include "../include/Checks.h"
 
 void Checks::privileges() {
   if (geteuid() == 0) {

@@ -1,13 +1,14 @@
 
+
 #include <iostream>
 #include <string>
 
 #include "Checks.h"
-#include "Logger.h"
 #include "Stages.h"
+import Log;
 
 int main(const int argc, char *argv[]) {
-  Logger &logger = Logger::instance();
+  Log &logger = Log::instance();
   logger.setLogLevel(LogLevel::Debug);
 
   try {
@@ -25,6 +26,6 @@ int main(const int argc, char *argv[]) {
                "Compilation successful! Executable: " + basename);
   } catch (const std::exception &e) {
     std::cerr << e.what() << std::endl;
-    return 1;
   } // end try-catch
+  return 0;
 }

@@ -7,7 +7,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
+set(CMAKE_CXX_EXTENSIONS OFF)  # This ensures that only standard C++ is used, not GNU extensions
 add_compile_options(-Wall -Wextra -Wpedantic)
 
 
@@ -25,10 +25,15 @@ elseif (SANITIZER_MODE STREQUAL "memory")
 else ()
     set(SANITIZER_FLAGS "-fsanitize=address,undefined")
 endif ()
-# Apply the sanitizer flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
-set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${SANITIZER_FLAGS}")
 
+# Apply the sanitizer flags
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    # No sanitizers in Debug mode
+else ()
+    # Enable sanitizers for other modes
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
+    set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${SANITIZER_FLAGS}")
+endif ()
 
 # Collect source files
 file(GLOB_RECURSE ALL_SOURCE_FILES *.cpp *.h)
@@ -87,18 +92,14 @@ endif ()
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # Include subdirectory for driver
-add_subdirectory(src/driver)
+add_subdirectory(src)
 
-# Include subdirectory for logging
-add_subdirectory(src/log)
 
 # Compiler
-add_executable(my_compiler src/compiler.cpp)
-target_link_libraries(my_compiler PRIVATE ${REFLEX_LIB})
+
 
 # Lexer
-add_executable(Lexer ${LEXER_OUTPUT})
-target_link_libraries(Lexer PRIVATE ${REFLEX_LIB})
 
-add_subdirectory(test)
+
+add_subdirectory(tests)
 

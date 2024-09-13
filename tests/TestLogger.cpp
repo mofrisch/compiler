@@ -1,9 +1,10 @@
-#include "Logger.h"
+
 #include <gtest/gtest.h>
 #include <sstream>
 #include <iostream>
 #include <regex>
 
+import Log;
 // Helper class to redirect std::cout for testing
 class CoutRedirect {
 public:
@@ -17,7 +18,7 @@ private:
     std::streambuf *old;
 };
 
-// Test fixture for Logger
+// Test fixture for Log
 class LoggerTest : public ::testing::Test {
 protected:
     void SetUp() override {
@@ -37,14 +38,14 @@ protected:
 
 // Test singleton instance retrieval
 TEST_F(LoggerTest, SingletonInstance) {
-    Logger &instance1 = Logger::instance();
-    Logger &instance2 = Logger::instance();
+    Log &instance1 = Log::instance();
+    Log &instance2 = Log::instance();
     EXPECT_EQ(&instance1, &instance2); // Check if both instances are the same
 }
 
 // Test that the log level can be set and messages are logged at or above the level
 TEST_F(LoggerTest, SetLogLevelAndLogMessages) {
-    Logger &logger = Logger::instance();
+    Log &logger = Log::instance();
 
     // Set log level to Debug and log a Debug message
     logger.setLogLevel(LogLevel::Debug);
@@ -63,7 +64,7 @@ TEST_F(LoggerTest, SetLogLevelAndLogMessages) {
 
 // Test log level filtering
 TEST_F(LoggerTest, LogLevelFiltering) {
-    Logger &logger = Logger::instance();
+    Log &logger = Log::instance();
 
     // Set log level to Warning
     logger.setLogLevel(LogLevel::Warning);
@@ -79,7 +80,7 @@ TEST_F(LoggerTest, LogLevelFiltering) {
 
 // Test log output formatting (timestamp and log level)
 TEST_F(LoggerTest, LogOutputFormat) {
-    Logger &logger = Logger::instance();
+    Log &logger = Log::instance();
     logger.setLogLevel(LogLevel::Info);
     logger.log(LogLevel::Info, "Formatted message");
 
@@ -93,7 +94,7 @@ TEST_F(LoggerTest, LogOutputFormat) {
 
 // Test color codes for different log levels
 TEST_F(LoggerTest, LogColorCodes) {
-    Logger &logger = Logger::instance();
+    Log &logger = Log::instance();
 
     // Test Debug (Blue)
     logger.setLogLevel(LogLevel::Debug);
@@ -121,7 +122,7 @@ TEST_F(LoggerTest, LogColorCodes) {
 
 // Test that color is reset after log message
 TEST_F(LoggerTest, ResetColorAfterLog) {
-    Logger &logger = Logger::instance();
+    Log &logger = Log::instance();
     logger.setLogLevel(LogLevel::Info);
     logger.log(LogLevel::Info, "Info message");
 
@@ -131,7 +132,7 @@ TEST_F(LoggerTest, ResetColorAfterLog) {
 
 // Test logging below the current log level
 TEST_F(LoggerTest, LoggingBelowCurrentLevel) {
-    Logger &logger = Logger::instance();
+    Log &logger = Log::instance();
 
     // Set log level to Error
     logger.setLogLevel(LogLevel::Error);
