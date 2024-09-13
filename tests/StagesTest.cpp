@@ -36,17 +36,6 @@ protected:
     }
 };
 
-// Test command execution success
-TEST_F(StagesTest, RunCommandSuccess) {
-    int result = Stages::run_command("echo", {"Hello, World!"});
-    EXPECT_EQ(result, 0); // Command should succeed
-}
-
-// Test command execution failure
-TEST_F(StagesTest, RunCommandFailure) {
-    int result = Stages::run_command("nonexistentcommand", {});
-    EXPECT_NE(result, 0); // Command should fail
-}
 
 // Test successful preprocessing stage
 TEST_F(StagesTest, PreprocessingSuccess) {

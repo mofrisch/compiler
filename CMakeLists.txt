@@ -1,3 +1,5 @@
+# This is the main CMakeLists file for the project
+
 cmake_minimum_required(VERSION 3.28)
 project(Compiler VERSION 0.1.0 LANGUAGES C CXX)
 
@@ -91,6 +93,7 @@ endif ()
 # Include directories for header files
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
+
 # Include subdirectory for driver
 add_subdirectory(src)
 
@@ -100,6 +103,8 @@ add_subdirectory(src)
 
 # Lexer
 
-
+# Tests
+enable_testing()
+include_directories(/usr/include/llvm-gmock)
 add_subdirectory(tests)
 

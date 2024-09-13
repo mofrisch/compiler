@@ -5,6 +5,7 @@
 #include <regex>
 
 #include "Log.h"
+
 // Helper class to redirect std::cout for testing
 class CoutRedirect {
 public:
@@ -19,7 +20,7 @@ private:
 };
 
 // Test fixture for Log
-class LoggerTest : public ::testing::Test {
+class LogTest : public ::testing::Test {
 protected:
     void SetUp() override {
         // Redirect cout to a stringstream to capture the logger output
@@ -37,14 +38,14 @@ protected:
 };
 
 // Test singleton instance retrieval
-TEST_F(LoggerTest, SingletonInstance) {
+TEST_F(LogTest, SingletonInstance) {
     Log &instance1 = Log::instance();
     Log &instance2 = Log::instance();
     EXPECT_EQ(&instance1, &instance2); // Check if both instances are the same
 }
 
 // Test that the log level can be set and messages are logged at or above the level
-TEST_F(LoggerTest, SetLogLevelAndLogMessages) {
+TEST_F(LogTest, SetLogLevelAndLogMessages) {
     Log &logger = Log::instance();
 
     // Set log level to Debug and log a Debug message
@@ -63,7 +64,7 @@ TEST_F(LoggerTest, SetLogLevelAndLogMessages) {
 }
 
 // Test log level filtering
-TEST_F(LoggerTest, LogLevelFiltering) {
+TEST_F(LogTest, LogLevelFiltering) {
     Log &logger = Log::instance();
 
     // Set log level to Warning
@@ -79,7 +80,7 @@ TEST_F(LoggerTest, LogLevelFiltering) {
 }
 
 // Test log output formatting (timestamp and log level)
-TEST_F(LoggerTest, LogOutputFormat) {
+TEST_F(LogTest, LogOutputFormat) {
     Log &logger = Log::instance();
     logger.setLogLevel(LogLevel::Info);
     logger.log(LogLevel::Info, "Formatted message");
@@ -93,7 +94,7 @@ TEST_F(LoggerTest, LogOutputFormat) {
 }
 
 // Test color codes for different log levels
-TEST_F(LoggerTest, LogColorCodes) {
+TEST_F(LogTest, LogColorCodes) {
     Log &logger = Log::instance();
 
     // Test Debug (Blue)
@@ -121,7 +122,7 @@ TEST_F(LoggerTest, LogColorCodes) {
 }
 
 // Test that color is reset after log message
-TEST_F(LoggerTest, ResetColorAfterLog) {
+TEST_F(LogTest, ResetColorAfterLog) {
     Log &logger = Log::instance();
     logger.setLogLevel(LogLevel::Info);
     logger.log(LogLevel::Info, "Info message");
@@ -131,7 +132,7 @@ TEST_F(LoggerTest, ResetColorAfterLog) {
 }
 
 // Test logging below the current log level
-TEST_F(LoggerTest, LoggingBelowCurrentLevel) {
+TEST_F(LogTest, LoggingBelowCurrentLevel) {
     Log &logger = Log::instance();
 
     // Set log level to Error
@@ -146,4 +147,9 @@ TEST_F(LoggerTest, LoggingBelowCurrentLevel) {
     EXPECT_EQ(output.str().find("Info message"), std::string::npos);
     EXPECT_EQ(output.str().find("Warning message"), std::string::npos);
     EXPECT_NE(output.str().find("Error message"), std::string::npos);
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
