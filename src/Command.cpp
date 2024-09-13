@@ -3,7 +3,7 @@
 //
 
 #include "Command.h"
-import Log;
+#include "Log.h"
 
 #include <unistd.h>
 #include <sys/wait.h>

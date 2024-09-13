@@ -5,7 +5,7 @@
 
 #include "Checks.h"
 #include "Stages.h"
-import Log;
+#include "Log.h"
 
 int main(const int argc, char *argv[]) {
   Log &logger = Log::instance();

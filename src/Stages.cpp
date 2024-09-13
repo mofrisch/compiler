@@ -1,6 +1,6 @@
-#include "../include/Stages.h"
-import Log;
-#include "../include/Command.h"
+#include "Stages.h"
+#include"Log.h"
+#include "Command.h"
 
 #include <stdexcept>
 #include <string>

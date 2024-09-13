@@ -8,11 +8,8 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Define the module library
-add_library(log STATIC Log.cppm)
-target_sources(log
-        PUBLIC
-        FILE_SET modules TYPE CXX_MODULES FILES Log.cppm
-)
+add_library(log STATIC Log.cpp)
+
 
 # Add the include directory
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -24,6 +21,7 @@ set(SOURCES
         Checks.cpp
         Stages.cpp
         Command.cpp
+        Log.cpp
 )
 
 # Add the executable

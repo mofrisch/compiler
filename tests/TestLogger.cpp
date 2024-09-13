@@ -4,7 +4,7 @@
 #include <iostream>
 #include <regex>
 
-import Log;
+#include "Log.h"
 // Helper class to redirect std::cout for testing
 class CoutRedirect {
 public:
