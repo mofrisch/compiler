@@ -33,6 +33,16 @@ protected:
         redirect.reset(); // Stop redirecting cout
     }
 
+    void redirect_on(bool redirect) {
+        if (redirect) {
+            output.str("");
+            output.clear();
+            this->redirect = std::make_unique<CoutRedirect>(output);
+        } else {
+            this->redirect.reset();
+        }
+    }
+
     std::stringstream output;
     std::unique_ptr<CoutRedirect> redirect;
 };
@@ -129,6 +139,25 @@ TEST_F(LogTest, ResetColorAfterLog) {
 
     // Check if color reset code \033[0m is at the end
     EXPECT_NE(output.str().find("\033[0m"), std::string::npos); // Reset color code
+}
+
+TEST_F(LogTest, WriteColoredLines) {
+    Log &logger = Log::instance();
+    redirect_on(false);
+
+    // Set log level to Debug
+    logger.setLogLevel(LogLevel::Debug);
+
+    // Test Debug (Blue)
+    logger.log(LogLevel::Debug, "Debug message");
+
+    logger.log(LogLevel::Info, "Info message");
+
+    logger.log(LogLevel::Warning, "Warning message");
+
+    logger.log(LogLevel::Error, "Error message");
+
+    redirect_on(true);
 }
 
 // Test logging below the current log level

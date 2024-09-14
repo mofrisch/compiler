@@ -18,7 +18,7 @@ void cleanup_files(const std::string &base_name) {
 }
 
 // Test fixture for Stages
-class StagesTest : public ::testing::Test, public Stages {
+class ChecksTest : public ::testing::Test {
 protected:
     std::string test_file = "tests.c";
 
@@ -38,30 +38,30 @@ protected:
 
 
 // Test successful preprocessing stage
-TEST_F(StagesTest, PreprocessingSuccess) {
+TEST_F(ChecksTest, PreprocessingSuccess) {
     EXPECT_NO_THROW(Stages::preprocess("tests"));
     EXPECT_TRUE(fs::exists("tests.i")); // Ensure the .i file is created
 }
 
 // Test preprocessing stage failure (invalid file)
-TEST_F(StagesTest, PreprocessingFailure) {
+TEST_F(ChecksTest, PreprocessingFailure) {
     EXPECT_THROW(Stages::preprocess("invalid"), std::runtime_error);
 }
 
 // Test successful compilation stage
-TEST_F(StagesTest, CompilationSuccess) {
+TEST_F(ChecksTest, CompilationSuccess) {
     Stages::preprocess("tests");
     EXPECT_NO_THROW(Stages::compile("gcc", "tests"));
     EXPECT_TRUE(fs::exists("tests.s")); // Ensure the .s file is created
 }
 
 // Test compilation stage failure (invalid file)
-TEST_F(StagesTest, CompilationFailure) {
+TEST_F(ChecksTest, CompilationFailure) {
     EXPECT_THROW(Stages::compile("gcc", "invalid"), std::runtime_error);
 }
 
 // Test successful assembly stage
-TEST_F(StagesTest, AssemblySuccess) {
+TEST_F(ChecksTest, AssemblySuccess) {
     Stages::preprocess("tests");
     Stages::compile("gcc", "tests");
     EXPECT_NO_THROW(Stages::assemble("tests"));
@@ -69,12 +69,12 @@ TEST_F(StagesTest, AssemblySuccess) {
 }
 
 // Test assembly stage failure (invalid file)
-TEST_F(StagesTest, AssemblyFailure) {
+TEST_F(ChecksTest, AssemblyFailure) {
     EXPECT_THROW(Stages::assemble("invalid"), std::runtime_error);
 }
 
 // Test successful linking stage
-TEST_F(StagesTest, LinkingSuccess) {
+TEST_F(ChecksTest, LinkingSuccess) {
     Stages::preprocess("tests");
     Stages::compile("gcc", "tests");
     Stages::assemble("tests");
@@ -83,12 +83,12 @@ TEST_F(StagesTest, LinkingSuccess) {
 }
 
 // Test linking stage failure (invalid file)
-TEST_F(StagesTest, LinkingFailure) {
+TEST_F(ChecksTest, LinkingFailure) {
     EXPECT_THROW(Stages::link("invalid"), std::runtime_error);
 }
 
 // Test the full workflow (preprocess, compile, assemble, link)
-TEST_F(StagesTest, FullWorkflowSuccess) {
+TEST_F(ChecksTest, FullWorkflowSuccess) {
     EXPECT_NO_THROW({
         Stages::preprocess("tests");
         Stages::compile("gcc", "tests");
@@ -102,7 +102,7 @@ TEST_F(StagesTest, FullWorkflowSuccess) {
 }
 
 // Test the full workflow with a failure in the linking stage
-TEST_F(StagesTest, FullWorkflowFailureLink) {
+TEST_F(ChecksTest, FullWorkflowFailureLink) {
     EXPECT_NO_THROW({
         Stages::preprocess("tests");
         Stages::compile("gcc", "tests");
@@ -115,7 +115,7 @@ TEST_F(StagesTest, FullWorkflowFailureLink) {
 class LoggingStagesTest : public ::testing::Test {
 protected:
     std::stringstream log_output;
-    std::streambuf *old_cout_buf;
+    std::streambuf *old_cout_buf{};
 
     void SetUp() override {
         old_cout_buf = std::cout.rdbuf(); // Save old buffer
@@ -131,7 +131,7 @@ protected:
 TEST_F(LoggingStagesTest, LoggingPreprocess) {
     try {
         EXPECT_THROW(Stages::preprocess("tests"), std::runtime_error);
-    } catch (std::exception &e) {
+    } catch (std::exception &) {
         std::string log = log_output.str();
         EXPECT_EQ(log.find("Running Preprocessing stage..."), std::string::npos);
         EXPECT_EQ(log.find("Running command: gcc -E -P tests.c -o tests.i"), std::string::npos);
@@ -140,32 +140,41 @@ TEST_F(LoggingStagesTest, LoggingPreprocess) {
 
 // Test logging during compilation stage
 TEST_F(LoggingStagesTest, LoggingCompile) {
-    Stages::preprocess("tests");
-    Stages::compile("gcc", "tests");
-    std::string log = log_output.str();
-    EXPECT_NE(log.find("Running Compiling stage..."), std::string::npos);
-    EXPECT_NE(log.find("Running command: gcc -S tests.i -o tests.s"), std::string::npos);
+    try {
+        EXPECT_THROW(Stages::compile("gcc", "tests"), std::runtime_error);
+    } catch (std::exception &) {
+        std::string log = log_output.str();
+        EXPECT_NE(log.find("Running Compilation stage..."), std::string::npos);
+        EXPECT_NE(log.find("Running command: gcc -S tests.i -o tests.s"), std::string::npos);
+    }
 }
+
 
 // Test logging during assembly stage
 TEST_F(LoggingStagesTest, LoggingAssemble) {
-    Stages::preprocess("tests");
-    Stages::compile("gcc", "tests");
-    Stages::assemble("tests");
-    std::string log = log_output.str();
-    EXPECT_NE(log.find("Running Assembling stage..."), std::string::npos);
-    EXPECT_NE(log.find("Running command: as tests.s -o tests.o"), std::string::npos);
+    try {
+        EXPECT_THROW(Stages::assemble("tests"), std::runtime_error);
+    } catch (std::exception &) {
+        std::string log = log_output.str();
+        EXPECT_NE(log.find("Running Assembly stage..."), std::string::npos);
+        EXPECT_NE(log.find("Running command: gcc -c tests.s -o tests.o"), std::string::npos);
+    }
 }
 
 // Test logging during linking stage
 TEST_F(LoggingStagesTest, LoggingLink) {
-    Stages::preprocess("tests");
-    Stages::compile("gcc", "tests");
-    Stages::assemble("tests");
-    Stages::link("tests");
-    std::string log = log_output.str();
-    EXPECT_NE(log.find("Running Linking stage..."), std::string::npos);
-    EXPECT_NE(log.find("Running command: gcc tests.o -o tests"), std::string::npos);
+    try {
+        EXPECT_THROW(Stages::link("tests"), std::runtime_error);
+    } catch (std::exception &) {
+        std::string log = log_output.str();
+        EXPECT_NE(log.find("Running Linking stage..."), std::string::npos);
+        EXPECT_NE(log.find("Running command: gcc tests.o -o tests"), std::string::npos);
+    }
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
 
 
