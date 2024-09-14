@@ -9,7 +9,7 @@
 // Helper class to redirect std::cout for testing
 class CoutRedirect {
 public:
-    CoutRedirect(std::ostream &new_stream)
+    explicit CoutRedirect(const std::ostream &new_stream)
         : old(std::cout.rdbuf(new_stream.rdbuf())) {
     }
 
@@ -20,7 +20,7 @@ private:
 };
 
 // Test fixture for Log
-class LogTest : public ::testing::Test {
+class LogTest : public testing::Test {
 protected:
     void SetUp() override {
         // Redirect cout to a stringstream to capture the logger output
@@ -33,7 +33,7 @@ protected:
         redirect.reset(); // Stop redirecting cout
     }
 
-    void redirect_on(bool redirect) {
+    void redirect_on(const bool redirect) {
         if (redirect) {
             output.str("");
             output.clear();
@@ -99,7 +99,7 @@ TEST_F(LogTest, LogOutputFormat) {
     EXPECT_NE(log_output.find("INFO"), std::string::npos); // Ensure "INFO" appears in output
 
     // Check if timestamp format (YYYY-MM-DD HH:MM:SS) is present in the output
-    std::regex time_regex(R"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})");
+    const std::regex time_regex(R"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})");
     EXPECT_TRUE(std::regex_search(log_output, time_regex)) << "Timestamp not found in log output";
 }
 
@@ -179,6 +179,6 @@ TEST_F(LogTest, LoggingBelowCurrentLevel) {
 }
 
 int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
+    testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

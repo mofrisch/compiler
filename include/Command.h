@@ -18,12 +18,12 @@ public:
 
 class Command {
 public:
-    int run(const std::string &name, const std::string &command, const std::vector<std::string> &args);
+    static int run(const std::string &name, const std::string &command, const std::vector<std::string> &args);
 
 private:
-    std::string construct_full_command(const std::string &command, const std::vector<std::string> &args) const;
+    static std::string construct_full_command(const std::string &command, const std::vector<std::string> &args);
 
-    void execute_command(const std::string &command, const std::vector<std::string> &args) const;
+    static void execute_command(const std::string &command, const std::vector<std::string> &args);
 };
 
 #endif // COMMAND_H

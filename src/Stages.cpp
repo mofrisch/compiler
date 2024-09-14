@@ -1,19 +1,17 @@
 #include "Stages.h"
-#include"Log.h"
 #include "Command.h"
 
-#include <stdexcept>
 #include <string>
 #include <vector>
 
-extern Log &logger;
+// extern Log &logger;
 
-Command command;;
+//extern Command &command;;
 
 
 void Stages::execute_stage(const std::string &stage_name, const std::string &command_name,
                            const std::vector<std::string> &args) {
-    command.run(stage_name, command_name, args);
+    Command::run(stage_name, command_name, args);
 }
 
 

@@ -18,7 +18,7 @@ void cleanup_files(const std::string &base_name) {
 }
 
 // Test fixture for Stages
-class ChecksTest : public ::testing::Test {
+class ChecksTest : public testing::Test {
 protected:
     std::string test_file = "tests.c";
 
@@ -112,7 +112,7 @@ TEST_F(ChecksTest, FullWorkflowFailureLink) {
 }
 
 // Test logging for each stage (using a custom log capturing mechanism)
-class LoggingStagesTest : public ::testing::Test {
+class LoggingStagesTest : public testing::Test {
 protected:
     std::stringstream log_output;
     std::streambuf *old_cout_buf{};
@@ -173,7 +173,7 @@ TEST_F(LoggingStagesTest, LoggingLink) {
 }
 
 int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
+    testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
 
