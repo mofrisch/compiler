@@ -5,14 +5,13 @@
 #include "Command.h"
 #include "Log.h"
 
-#include <unistd.h>
-#include <sys/wait.h>
 #include <cstring>
+#include <sys/wait.h>
+#include <unistd.h>
 
 Log &logger = Log::instance();
 
-std::string Command::construct_full_command(const std::string &command,
-                                            const std::vector<std::string> &args) {
+std::string Command::construct_full_command(const std::string &command, const std::vector<std::string> &args) {
     std::string full_command = command;
     for (const auto &arg: args) {
         full_command += " " + arg;
@@ -34,8 +33,9 @@ void Command::execute_command(const std::string &command, const std::vector<std:
     }
 }
 
-int Command::run(const std::string &name,
-                 const std::string &command, const std::vector<std::string> &args) {
+// TODO: Refactor this function to return a CommandStatus enum
+//  instead of throwing exceptions and to make it a bit cleaner
+int Command::run(const std::string &name, const std::string &command, const std::vector<std::string> &args) {
     try {
         logger.log(LogLevel::Info, "Running " + name + " stage.");
         const std::string full_command = construct_full_command(command, args);

@@ -15,7 +15,7 @@ public:
 
     static void assemble(const std::string &basename);
 
-    static void link(const std::string &basename);
+    static auto link(const std::string &basename) -> void;
 
     static void simple_test();
 
@@ -23,8 +23,7 @@ public:
 
 protected:
     // TODO CommandStatus
-    static auto run_command(const std::string &command,
-                            const std::vector<std::string> &args) -> int;
+    static auto run_command(const std::string &command, const std::vector<std::string> &args) -> int;
 
     static void execute_stage(const std::string &stage_name, const std::string &command_name,
                               const std::vector<std::string> &args);
