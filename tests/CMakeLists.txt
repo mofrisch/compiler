@@ -8,17 +8,18 @@ find_package(GTest REQUIRED)
 
 # Source files for the project
 set(SOURCES
-        ../src/Checks.cpp
-        ../src/Command.cpp
-        ../src/Stages.cpp
-        ../src/Log.cpp
+        ../src/checks.cpp
+        ../src/command.cpp
+        ../src/stages.cpp
+        ../src/log.cpp
 )
 
 # Test source files
 set(TEST_SOURCES
-        LogTest.cpp
-        StagesTest.cpp
-        ChecksTest.cpp
+        log_test.cpp
+        stages_test.cpp
+        checks_test.cpp
+        command_test.cpp
 )
 
 # Enable testing

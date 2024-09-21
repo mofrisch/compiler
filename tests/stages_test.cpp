@@ -2,10 +2,10 @@
 // Created by mo on 9/9/24.
 //
 
-#include <gtest/gtest.h>
-#include <fstream>
+#include "stages.h"
 #include <filesystem>
-#include "Stages.h"
+#include <fstream>
+#include <gtest/gtest.h>
 
 namespace fs = std::filesystem;
 
@@ -44,9 +44,7 @@ TEST_F(ChecksTest, PreprocessingSuccess) {
 }
 
 // Test preprocessing stage failure (invalid file)
-TEST_F(ChecksTest, PreprocessingFailure) {
-    EXPECT_THROW(Stages::preprocess("invalid"), std::runtime_error);
-}
+TEST_F(ChecksTest, PreprocessingFailure) { EXPECT_THROW(Stages::preprocess("invalid"), std::runtime_error); }
 
 // Test successful compilation stage
 TEST_F(ChecksTest, CompilationSuccess) {
@@ -56,9 +54,7 @@ TEST_F(ChecksTest, CompilationSuccess) {
 }
 
 // Test compilation stage failure (invalid file)
-TEST_F(ChecksTest, CompilationFailure) {
-    EXPECT_THROW(Stages::compile("gcc", "invalid"), std::runtime_error);
-}
+TEST_F(ChecksTest, CompilationFailure) { EXPECT_THROW(Stages::compile("gcc", "invalid"), std::runtime_error); }
 
 // Test successful assembly stage
 TEST_F(ChecksTest, AssemblySuccess) {
@@ -69,9 +65,7 @@ TEST_F(ChecksTest, AssemblySuccess) {
 }
 
 // Test assembly stage failure (invalid file)
-TEST_F(ChecksTest, AssemblyFailure) {
-    EXPECT_THROW(Stages::assemble("invalid"), std::runtime_error);
-}
+TEST_F(ChecksTest, AssemblyFailure) { EXPECT_THROW(Stages::assemble("invalid"), std::runtime_error); }
 
 // Test successful linking stage
 TEST_F(ChecksTest, LinkingSuccess) {
@@ -83,9 +77,7 @@ TEST_F(ChecksTest, LinkingSuccess) {
 }
 
 // Test linking stage failure (invalid file)
-TEST_F(ChecksTest, LinkingFailure) {
-    EXPECT_THROW(Stages::link("invalid"), std::runtime_error);
-}
+TEST_F(ChecksTest, LinkingFailure) { EXPECT_THROW(Stages::link("invalid"), std::runtime_error); }
 
 // Test the full workflow (preprocess, compile, assemble, link)
 TEST_F(ChecksTest, FullWorkflowSuccess) {
@@ -94,7 +86,7 @@ TEST_F(ChecksTest, FullWorkflowSuccess) {
         Stages::compile("gcc", "tests");
         Stages::assemble("tests");
         Stages::link("tests");
-        });
+    });
     EXPECT_TRUE(fs::exists("tests.i")); // Check that all intermediate files exist
     EXPECT_TRUE(fs::exists("tests.s"));
     EXPECT_TRUE(fs::exists("tests.o"));
@@ -107,7 +99,7 @@ TEST_F(ChecksTest, FullWorkflowFailureLink) {
         Stages::preprocess("tests");
         Stages::compile("gcc", "tests");
         Stages::assemble("tests");
-        });
+    });
     EXPECT_THROW(Stages::link("invalid"), std::runtime_error); // Should fail during linking
 }
 
@@ -176,5 +168,3 @@ int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
-
-

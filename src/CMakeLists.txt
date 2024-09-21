@@ -11,10 +11,10 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set(SOURCES
         main.cpp
-        Checks.cpp
-        Stages.cpp
-        Command.cpp
-        Log.cpp
+        checks.cpp
+        stages.cpp
+        command.cpp
+        log.cpp
 )
 
 add_executable(Driver ${SOURCES})

@@ -1,17 +1,15 @@
 
 #include <gtest/gtest.h>
-#include <sstream>
 #include <iostream>
 #include <regex>
+#include <sstream>
 
-#include "Log.h"
+#include "log.h"
 
 // Helper class to redirect std::cout for testing
 class CoutRedirect {
 public:
-    explicit CoutRedirect(const std::ostream &new_stream)
-        : old(std::cout.rdbuf(new_stream.rdbuf())) {
-    }
+    explicit CoutRedirect(const std::ostream &new_stream) : old(std::cout.rdbuf(new_stream.rdbuf())) {}
 
     ~CoutRedirect() { std::cout.rdbuf(old); }
 

@@ -6,7 +6,7 @@
 #include <string>
 
 
-#include "Log.h"
+#include "log.h"
 
 std::string currentTime() {
     using namespace std::chrono;

@@ -2,8 +2,8 @@
 // Created by mo on 9/12/24.
 //
 
-#include "Command.h"
-#include "Log.h"
+#include "command.h"
+#include "log.h"
 
 #include <cstring>
 #include <sys/wait.h>
@@ -29,7 +29,7 @@ void Command::execute_command(const std::string &command, const std::vector<std:
     exec_args.push_back(nullptr);
 
     if (execvp(command.c_str(), const_cast<char *const *>(exec_args.data())) == -1) {
-        throw std::runtime_error("Error executing command: " + std::string(strerror(errno)));
+        throw CommandException("Error executing command: " + std::string(strerror(errno)));
     }
 }
 

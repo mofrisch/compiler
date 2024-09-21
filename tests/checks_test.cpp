@@ -1,22 +1,20 @@
 
+#include <filesystem>
+#include <fstream>
 #include <gtest/gtest.h>
 #include <stdexcept>
 #include <string>
-#include <fstream>
-#include <filesystem>
 
-#include "Checks.h"
+#include "checks.h"
 
 // Test fixture for Stages
 class ChecksTest : public testing::Test {
 protected:
     std::string test_file = "test.c";
 
-    void SetUp() override {
-    }
+    void SetUp() override {}
 
-    void TearDown() override {
-    }
+    void TearDown() override {}
 };
 
 // Test for privileges function

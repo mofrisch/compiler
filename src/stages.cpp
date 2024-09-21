@@ -1,12 +1,12 @@
-#include "Stages.h"
-#include "Command.h"
+#include "stages.h"
+#include "command.h"
 
 #include <string>
 #include <vector>
 
 // extern Log &logger;
 
-//extern Command &command;;
+// extern Command &command;;
 
 
 void Stages::execute_stage(const std::string &stage_name, const std::string &command_name,
@@ -27,8 +27,4 @@ void Stages::assemble(const std::string &basename) {
     execute_stage("Assembling", "as", {basename + ".s", "-o", basename + ".o"});
 }
 
-void Stages::link(const std::string &basename) {
-    execute_stage("Linking", "gcc", {basename + ".o", "-o", basename});
-}
-
-
+void Stages::link(const std::string &basename) { execute_stage("Linking", "gcc", {basename + ".o", "-o", basename}); }
