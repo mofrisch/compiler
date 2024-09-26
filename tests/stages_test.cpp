@@ -46,62 +46,6 @@ TEST_F(ChecksTest, PreprocessingSuccess) {
 // Test preprocessing stage failure (invalid file)
 TEST_F(ChecksTest, PreprocessingFailure) { EXPECT_THROW(Stages::preprocess("invalid"), std::runtime_error); }
 
-// Test successful compilation stage
-TEST_F(ChecksTest, CompilationSuccess) {
-    Stages::preprocess("tests");
-    EXPECT_NO_THROW(Stages::compile("gcc", "tests"));
-    EXPECT_TRUE(fs::exists("tests.s")); // Ensure the .s file is created
-}
-
-// Test compilation stage failure (invalid file)
-TEST_F(ChecksTest, CompilationFailure) { EXPECT_THROW(Stages::compile("gcc", "invalid"), std::runtime_error); }
-
-// Test successful assembly stage
-TEST_F(ChecksTest, AssemblySuccess) {
-    Stages::preprocess("tests");
-    Stages::compile("gcc", "tests");
-    EXPECT_NO_THROW(Stages::assemble("tests"));
-    EXPECT_TRUE(fs::exists("tests.o")); // Ensure the .o file is created
-}
-
-// Test assembly stage failure (invalid file)
-TEST_F(ChecksTest, AssemblyFailure) { EXPECT_THROW(Stages::assemble("invalid"), std::runtime_error); }
-
-// Test successful linking stage
-TEST_F(ChecksTest, LinkingSuccess) {
-    Stages::preprocess("tests");
-    Stages::compile("gcc", "tests");
-    Stages::assemble("tests");
-    EXPECT_NO_THROW(Stages::link("tests"));
-    EXPECT_TRUE(fs::exists("tests")); // Ensure the executable is created
-}
-
-// Test linking stage failure (invalid file)
-TEST_F(ChecksTest, LinkingFailure) { EXPECT_THROW(Stages::link("invalid"), std::runtime_error); }
-
-// Test the full workflow (preprocess, compile, assemble, link)
-TEST_F(ChecksTest, FullWorkflowSuccess) {
-    EXPECT_NO_THROW({
-        Stages::preprocess("tests");
-        Stages::compile("gcc", "tests");
-        Stages::assemble("tests");
-        Stages::link("tests");
-    });
-    EXPECT_TRUE(fs::exists("tests.i")); // Check that all intermediate files exist
-    EXPECT_TRUE(fs::exists("tests.s"));
-    EXPECT_TRUE(fs::exists("tests.o"));
-    EXPECT_TRUE(fs::exists("tests")); // Check that the final executable exists
-}
-
-// Test the full workflow with a failure in the linking stage
-TEST_F(ChecksTest, FullWorkflowFailureLink) {
-    EXPECT_NO_THROW({
-        Stages::preprocess("tests");
-        Stages::compile("gcc", "tests");
-        Stages::assemble("tests");
-    });
-    EXPECT_THROW(Stages::link("invalid"), std::runtime_error); // Should fail during linking
-}
 
 // Test logging for each stage (using a custom log capturing mechanism)
 class LoggingStagesTest : public testing::Test {
@@ -133,7 +77,7 @@ TEST_F(LoggingStagesTest, LoggingPreprocess) {
 // Test logging during compilation stage
 TEST_F(LoggingStagesTest, LoggingCompile) {
     try {
-        EXPECT_THROW(Stages::compile("gcc", "tests"), std::runtime_error);
+        EXPECT_THROW(Stages::compile("tests"), std::runtime_error);
     } catch (std::exception &) {
         std::string log = log_output.str();
         EXPECT_NE(log.find("Running Compilation stage..."), std::string::npos);

@@ -1,10 +1,6 @@
-cmake_minimum_required(VERSION 3.10)
 
-# Set project name and version
-project(YourProjectName VERSION 1.0 LANGUAGES CXX)
-
-# Add the path to gmock headers
 find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
 
 # Source files for the project
 set(SOURCES

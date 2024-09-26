@@ -53,12 +53,13 @@ find_package(GTest REQUIRED)
 find_package(Threads REQUIRED)
 # google benchmark integration
 find_package(benchmark REQUIRED)
+
 # Boost integration
-find_package(Boost REQUIRED COMPONENTS system filesystem)
+find_package(Boost REQUIRED COMPONENTS program_options)
 # If Boost is found, include directories and link the libraries
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
-    # TODO: Add the libraries to the target
+    link_directories(${Boost_LIBRARY_DIRS})
 else ()
     message(FATAL_ERROR "Boost not found")
 endif ()
@@ -93,13 +94,11 @@ endif ()
 # Include directories for header files
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-
 # Include subdirectory for driver
 add_subdirectory(src)
 
-
 # Compiler
-
+# add_subdirectory(src/compiler)
 
 # Lexer
 

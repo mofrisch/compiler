@@ -11,7 +11,7 @@ class Stages {
 public:
     static void preprocess(const std::string &basename);
 
-    static void compile(const std::string &compiler, const std::string &basename);
+    static void compile(const std::string &basename);
 
     static void assemble(const std::string &basename);
 
