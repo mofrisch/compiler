@@ -15,7 +15,7 @@ void Stages::preprocess(const std::string &basename) {
 }
 
 void Stages::compile(const std::string &basename) {
-    execute_stage("Compiling", "gcc", {basename + ".i", "-o", basename + ".s"});
+    execute_stage("Compiling", "./mcc", {basename + ".i", "-o", basename + ".s"});
 }
 
 void Stages::assemble(const std::string &basename) {

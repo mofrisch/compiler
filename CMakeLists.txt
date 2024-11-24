@@ -55,7 +55,7 @@ find_package(Threads REQUIRED)
 find_package(benchmark REQUIRED)
 
 # Boost integration
-find_package(Boost REQUIRED COMPONENTS program_options)
+find_package(Boost CONFIG REQUIRED COMPONENTS program_options)
 # If Boost is found, include directories and link the libraries
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
@@ -85,7 +85,7 @@ if (ENABLE_LEXER)
     )
 
     # Find RE/flex shared library
-    find_library(REFLEX_LIB reflex_shared_lib HINTS /usr/local/lib64)
+    find_library(REFLEX_LIB reflex)
     if (NOT REFLEX_LIB)
         message(FATAL_ERROR "RE/flex library not found.")
     endif ()
@@ -98,7 +98,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 add_subdirectory(src)
 
 # Compiler
-# add_subdirectory(src/compiler)
+add_subdirectory(src/compiler)
 
 # Lexer
 

@@ -90,19 +90,19 @@ int main(int argc, char *argv[]) {
         Stages::preprocess(basename);
 
         // Handle lex, parse, or codegen options
-        if (vm.count("lex")) {
+        if (vm.count("lex") || vm.count("parse") || vm.count("codegen")) {
             std::cout << "Lexing...\n";
             // Insert your lexing logic here
-            return 0;
-        } else if (vm.count("parse")) {
+        }
+        if (vm.count("parse")||vm.count("codegen")) {
             std::cout << "Parsing...\n";
             // Insert your parsing logic here
-            return 0;
-        } else if (vm.count("codegen")) {
+        }
+        if (vm.count("codegen")) {
             std::cout << "Generating code...\n";
             // Insert your code generation logic here
-            return 0;
         }
+
 
         if (vm.count("S")) {
             std::cout << "Generating assembly...\n";
@@ -111,11 +111,12 @@ int main(int argc, char *argv[]) {
         }
 
 
-        Stages::compile(basename);
+        // Stages::compile(basename);
         Stages::assemble(basename);
         Stages::link(basename);
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
+        return 1;
     }
     return 0;
 }

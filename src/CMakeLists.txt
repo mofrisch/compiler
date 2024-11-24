@@ -12,6 +12,6 @@ set(SOURCES
         lexer.cpp
 )
 
-add_executable(mcc ${SOURCES})
+add_executable(driver ${SOURCES})
 
-target_link_libraries(mcc ${Boost_LIBRARIES})
+target_link_libraries(driver ${Boost_LIBRARIES})
